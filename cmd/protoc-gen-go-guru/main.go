@@ -9,11 +9,13 @@ import (
 	_ "github.com/planetscale/vtprotobuf/features/grpc"
 	_ "github.com/planetscale/vtprotobuf/features/marshal"
 	_ "github.com/planetscale/vtprotobuf/features/pool"
+	_ "github.com/planetscale/vtprotobuf/features/repo"
+	_ "github.com/planetscale/vtprotobuf/features/rpcinfo"
+	_ "github.com/planetscale/vtprotobuf/features/setter"
 	_ "github.com/planetscale/vtprotobuf/features/size"
 	_ "github.com/planetscale/vtprotobuf/features/unmarshal"
 	"github.com/planetscale/vtprotobuf/generator"
-
-	"google.golang.org/protobuf/compiler/protogen"
+	"github.com/planetscale/vtprotobuf/generator/newgen"
 )
 
 func main() {
@@ -30,7 +32,7 @@ func main() {
 	f.StringVar(&features, "features", "all", "list of features to generate (separated by '+')")
 	f.StringVar(&cfg.BuildTag, "buildTag", "", "the go:build tag to set on generated files")
 
-	protogen.Options{ParamFunc: f.Set}.Run(func(plugin *protogen.Plugin) error {
+	newgen.NewCommandLineOpts(f.Set).Run(func(plugin *newgen.Plugin) error {
 		gen, err := generator.NewGenerator(plugin, strings.Split(features, "+"), &cfg)
 		if err != nil {
 			return err
