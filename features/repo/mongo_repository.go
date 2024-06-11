@@ -170,9 +170,9 @@ func getBsonFieldName(tagsString string) string {
 
 func transformIndex(i *orm.Index, _ int) *index {
 	result := &index{
-		Fields: make([]*indexField, 0),
+		Fields: make([]*indexField, len(i.Fields)),
 	}
-	for _, f := range i.Fields {
+	for ii, f := range i.Fields {
 		typeStr := ""
 		switch f.Type {
 		case orm.IndexType_AscIndex:
@@ -184,10 +184,10 @@ func transformIndex(i *orm.Index, _ int) *index {
 		case orm.IndexType_HashedIndex:
 			typeStr = "\"hashed\""
 		}
-		result.Fields = append(result.Fields, &indexField{
+		result.Fields[ii] = &indexField{
 			Field: f.Field,
 			Type:  typeStr,
-		})
+		}
 	}
 	return result
 }
